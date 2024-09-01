@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.project.springSecurity.dto.LoginDTO;
 import com.project.springSecurity.dto.SignUpDTO;
 import com.project.springSecurity.dto.UserDTO;
+import com.project.springSecurity.entities.PostEntity;
 import com.project.springSecurity.entities.User;
 import com.project.springSecurity.exceptions.ResourceNotFoundException;
 import com.project.springSecurity.repositories.UserRepository;
@@ -45,6 +46,12 @@ public class UserService implements UserDetailsService {
 		toCreate.setPassword(passwordEncoder.encode(toCreate.getPassword()));
 		User saveUser = userRepository.save(toCreate);
 		return modelMapper.map(saveUser, UserDTO.class);
+	}
+
+	public User getUserById(Long userId) {
+		User user = userRepository.findById(userId)
+					.orElseThrow(()->new ResourceNotFoundException("User not found with id "+userId));
+		return user;
 	}
 
 }
